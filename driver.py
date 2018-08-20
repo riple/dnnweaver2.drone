@@ -18,7 +18,7 @@ def drain_queue(queues):
         if not q.empty():
            q.get()
 
-def run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver_weight_pickle):
+def run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver2_weight_pickle):
 
     # Synchronous queues
     frame_q = Queue(maxsize=1)
@@ -46,10 +46,10 @@ def run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver_weight_pickle):
         proc = "cpu"
     elif yolo_engine == "tf-gpu":
         proc = "gpu"
-    elif yolo_engine == "dnnweaver":
+    elif yolo_engine == "dnnweaver2":
         proc = "gpu"
-    detectionProcess = Process(target=detection, args=(yolo_engine, tf_weight_pickle, dnnweaver_weight_pickle, frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, proc, ))
-#    detectionProcess = Process(target=detection, args=(yolo_engine, tf_weight_pickle, dnnweaver_weight_pickle, frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, proc, True, ))
+    detectionProcess = Process(target=detection, args=(yolo_engine, tf_weight_pickle, dnnweaver2_weight_pickle, frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, proc, ))
+#    detectionProcess = Process(target=detection, args=(yolo_engine, tf_weight_pickle, dnnweaver2_weight_pickle, frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, proc, True, ))
     detectionProcess.start()
 
     # Keyboard input handler
@@ -86,7 +86,7 @@ def run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver_weight_pickle):
 
 def main():
     if len(sys.argv) != 5:
-        print ("Usage: ./drone.py <drone|webcam> <tf-cpu|tf-gpu|dnnweaver> <tf-weight.pickle> <dnnweaver-weight.pickle>")
+        print ("Usage: ./drone.py <drone|webcam> <tf-cpu|tf-gpu|dnnweaver2> <tf-weight.pickle> <dnnweaver2-weight.pickle>")
         sys.exit()
     else:
         cam_source = sys.argv[1]
@@ -94,14 +94,14 @@ def main():
             print ("Unknown camera source: " + str(cam_source))
             raise
         yolo_engine = sys.argv[2]
-        if not (yolo_engine == "tf-cpu" or yolo_engine == "tf-gpu" or yolo_engine == "dnnweaver"):
+        if not (yolo_engine == "tf-cpu" or yolo_engine == "tf-gpu" or yolo_engine == "dnnweaver2"):
             print ("Unknown YOLO engine: " + str(yolo_engine))
             raise
         tf_weight_pickle = sys.argv[3]
-        dnnweaver_weight_pickle = sys.argv[4]
+        dnnweaver2_weight_pickle = sys.argv[4]
 
     print ("Yolo2 Object Detection Program Starts")
-    run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver_weight_pickle)
+    run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver2_weight_pickle)
     print ("Yolo2 Object Detection Program Ends")
 
 if __name__ == '__main__':
