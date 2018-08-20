@@ -30,7 +30,7 @@ Instructions
 
 		* bswap is the mode where bias and batch_normalization layers are swapped 
 		  from the TensorFlow counterpart. As of now, this is required to use the 
-		  bitfusion accelerator since Bias layer only works along with Conv layer 
+		  DnnWeaver2 accelerator since Bias layer only works along with Conv layer 
 		  on accelerator, while TensorFlow attches BatchNorm layer between Conv 
 		  and Bias layers.
 
@@ -89,7 +89,7 @@ Instructions
 			- fraqnn-testX-y2t-weights.pickle
 			- fraqnn-testX-bswap-y2t-weights.pickle
 		* Prefix fxp16 refers wegiht parameters that the pure python impl will use (dnn.python)
-		* Prefix fraqnn refers weight parameters that bitfusion framework will use (dnn.fpga)
+		* Prefix fraqnn refers weight parameters that DnnWeaver2 framework will use (dnn.fpga)
 
 6. Run Pure-Python-Yolo2-Tiny (dnn.python) in FXP16, compare to the FP32 counterpart, 
    and calculate the error rate (NRMSE)
