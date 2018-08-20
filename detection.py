@@ -32,13 +32,13 @@ def get_bbox(tfnet, box_input, h, w):
     return boxesInfo
 
 
-def detection(yolo_engine, tf_w_pickle, bitfusion_w_pickle, frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, proc="cpu", debug=False):
+def detection(yolo_engine, tf_w_pickle, dnnweaver_w_pickle, frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, proc="cpu", debug=False):
 
     options = {"model": "../dnnweaver2/example/conf/tiny-yolo-voc.cfg", "load": "../dnnweaver2/example/weights/tiny-yolo-voc.weights", "threshold": 0.25}
     tfnet = TFNet(options)
 
-    if yolo_engine == "bitfusion":
-        fpga_manager = dnn_fpga.initialize_yolo_graph(bitfusion_w_pickle)
+    if yolo_engine == "dnnweaver":
+        fpga_manager = dnn_fpga.initialize_yolo_graph(dnnweaver_w_pickle)
         if debug:
             y2t_tf_whole = YOLO2_TINY_TF([1, 416, 416, 3], tf_w_pickle, proc) 
     elif yolo_engine == "tf-cpu" or yolo_engine == "tf-gpu":
@@ -66,7 +66,7 @@ def detection(yolo_engine, tf_w_pickle, bitfusion_w_pickle, frame_q, frame_l, bb
                 im = np.expand_dims(im, 0)
                 tout = y2t_tf.inference(im)
                 result = get_bbox(tfnet, tout[0], h, w) 
-            elif yolo_engine == "bitfusion":
+            elif yolo_engine == "dnnweaver":
                 im = tfnet.framework.resize_input(cur_frame)
                 im = np.expand_dims(im, 0)
                 _im = yolo_demo.fp32tofxp16_tensor(im, 8) 
