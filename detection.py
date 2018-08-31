@@ -7,7 +7,7 @@ from darkflow.net.build import TFNet
 from util.thread import thread_print
 
 from example.dnn_tf.yolo2_tiny_tf import YOLO2_TINY_TF
-from example import dnn_fpga
+from example.dnn_fpga import dnn_fpga
 from example import yolo_demo
 
 def get_bbox(tfnet, box_input, h, w):

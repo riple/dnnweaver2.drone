@@ -1,3 +1,4 @@
 *.pickle
 *.pyc
 capture*
+inst.bin
