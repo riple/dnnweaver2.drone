@@ -3,7 +3,7 @@ from time import time, sleep
 
 from util.thread import thread_print
 
-def videofile_control(frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, videofile):
+def videofile_control(frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, in_videofile, out_videofile):
     thread_print ("Videofile Control Process Starts")
 
     width = 1024
@@ -11,9 +11,9 @@ def videofile_control(frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, videofil
 
     bbox = []
     font = cv2.FONT_HERSHEY_SIMPLEX
-    cam = cv2.VideoCapture(videofile)
+    cam = cv2.VideoCapture(in_videofile)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
-    out = cv2.VideoWriter("output.mp4", fourcc, 20.0, (width, height))
+    out = cv2.VideoWriter(out_videofile, fourcc, 20.0, (width, height))
     prev_time = 0.0
     y2t_fps_str = "YOLO2-TINY FPS: 0.0"
     done_printed = False

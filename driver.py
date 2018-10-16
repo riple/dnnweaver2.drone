@@ -19,7 +19,7 @@ def drain_queue(queues):
         if not q.empty():
            q.get()
 
-def run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver2_weight_pickle, videofile):
+def run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver2_weight_pickle, in_videofile, out_videofile):
 
     # Synchronous queues
     frame_q = Queue(maxsize=1)
@@ -42,7 +42,7 @@ def run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver2_weight_pickle, vid
         webcamProcess = Process(target=webcam_control, args=(frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, )) 
         webcamProcess.start()
     elif cam_source == "videofile":
-        videofileProcess = Process(target=videofile_control, args=(frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, videofile, )) 
+        videofileProcess = Process(target=videofile_control, args=(frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, in_videofile, out_videofile, )) 
         videofileProcess.start()
 
     # Object detection process using YOLO algorithm
@@ -90,7 +90,7 @@ def run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver2_weight_pickle, vid
 
 def main():
     if len(sys.argv) < 5:
-        print ("Usage: ./drone.py <drone|webcam|videofile> <tf-cpu|tf-gpu|dnnweaver2> <tf-weight.pickle> <dnnweaver2-weight.pickle>")
+        print ("Usage: ./drone.py <drone|webcam|videofile> <tf-cpu|tf-gpu|dnnweaver2> <tf-weight.pickle> <dnnweaver2-weight.pickle> [in_videofile] [out_videofile]")
         sys.exit()
     else:
         cam_source = sys.argv[1]
@@ -104,12 +104,14 @@ def main():
         tf_weight_pickle = sys.argv[3]
         dnnweaver2_weight_pickle = sys.argv[4]
         if cam_source == "videofile":
-            videofile = sys.argv[5]
+            in_videofile = sys.argv[5]
+            out_videofile = sys.argv[6]
         else:
-            videofile = None
+            in_videofile = None
+            out_videofile = None
 
     print ("Yolo2 Object Detection Program Starts")
-    run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver2_weight_pickle, videofile)
+    run(cam_source, yolo_engine, tf_weight_pickle, dnnweaver2_weight_pickle, in_videofile, out_videofile)
     print ("Yolo2 Object Detection Program Ends")
 
 if __name__ == '__main__':

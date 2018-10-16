@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -lt 4 ]; then
-	echo "Usage: ./driver.sh <drone|webcam|videofile> <tf-cpu|tf-gpu|dnnweaver2> <tf-weight.pickle> <dnnweaver2-wegiht.pickle> [<videofile>]"
+	echo "Usage: ./driver.sh <drone|webcam|videofile> <tf-cpu|tf-gpu|dnnweaver2> <tf-weight.pickle> <dnnweaver2-wegiht.pickle> [<input videofile>] [<output videofile>]"
 	exit
 fi
 
@@ -12,10 +12,12 @@ DW2_WEIGHT_PICKLE=$4
 if [[ "$CAM_SRC" = *"webcam"* ]]; then
 	rmmod uvcvideo
 	modprobe uvcvideo nodrop=1 timeout=10000 quirks=0x80
-	VIDEOFILE=
+	INVIDEOFILE=
+	OUTVIDEOFILE=
 elif [[ "$CAM_SRC" = *"videofile"* ]]; then 
-	VIDEOFILE=$5
+	INVIDEOFILE=$5
+	OUTVIDEOFILE=$6
 fi
 
-PYTHONPATH=../dnnweaver2 python driver.py $CAM_SRC $YOLO_ENGINE $TF_WEIGHT_PICKLE $DW2_WEIGHT_PICKLE $VIDEOFILE
+PYTHONPATH=../dnnweaver2 python driver.py $CAM_SRC $YOLO_ENGINE $TF_WEIGHT_PICKLE $DW2_WEIGHT_PICKLE $INVIDEOFILE $OUTVIDEOFILE
 

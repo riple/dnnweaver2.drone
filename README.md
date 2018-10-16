@@ -6,4 +6,5 @@ Instructions
 
 3. Run the driver.py with the dnnweaver2 directory included on the PYTHONPATH
 
-	* sudo PYTHONPATH=$PYTHONPATH:../dnnweaver2 ./driver.sh drone dnnweaver2 weights/yolo2_tiny_tf_weights.pickle weights/yolo2_tiny_dnnweaver2_weights.pickle
+	* Drone+DnnWeaver: sudo ./driver.sh drone dnnweaver2 weights/yolo2_tiny_tf_weights.pickle weights/yolo2_tiny_dnnweaver2_weights.pickle
+	* Videofile+TF-CPU: ./driver.sh videofile tf-cpu weights/yolo2_tiny_tf_weights.pickle weights/yolo2_tiny_dnnweaver2_weights.pickle videofiles/video.mp4 videofiles/video-out.mp4
