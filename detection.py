@@ -6,7 +6,7 @@ from darkflow.net.build import TFNet
 
 from util.thread import thread_print
 
-from example.dnn_tf.yolo2_tiny_tf import YOLO2_TINY_TF
+from example.yolo_tf.yolo2_tiny_tf import YOLO2_TINY_TF
 from example.dnn_fpga import dnn_fpga
 from example import yolo_demo
 

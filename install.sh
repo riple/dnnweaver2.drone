@@ -9,7 +9,7 @@ sudo apt-get install ffmpeg
 sudo apt-get install --only-upgrade ffmpeg
 sudo apt-get install -y graphviz cython
 
-python2.7 -m pip install --upgrade --user av cython image pandas graphviz
+python2.7 -m pip install --upgrade --user av cython image pandas graphviz opencv-python
 
 # tellopy
 git clone https://github.com/hanyazou/TelloPy.git
