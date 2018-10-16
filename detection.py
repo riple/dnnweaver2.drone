@@ -1,6 +1,7 @@
 from time import time, sleep
 import numpy as np
 import copy
+import cv2 as cv2
 
 from darkflow.net.build import TFNet
 
@@ -9,6 +10,13 @@ from util.thread import thread_print
 from example.yolo_tf.yolo2_tiny_tf import YOLO2_TINY_TF
 from example.dnn_fpga import dnn_fpga
 from example import yolo_demo
+
+def resize_input(input_size, im):
+    h, w, c = input_size
+    imsz = cv2.resize(im, (w, h))
+    imsz = imsz / 255.
+    imsz = imsz[:,:,::-1]
+    return imsz
 
 def get_bbox(tfnet, box_input, h, w):
     boxes = tfnet.framework.findboxes(box_input)
@@ -34,7 +42,7 @@ def get_bbox(tfnet, box_input, h, w):
 
 def detection(yolo_engine, tf_w_pickle, dnnweaver2_w_pickle, frame_q, frame_l, bbox_q, bbox_l, kill_q, done_q, proc="cpu", debug=False):
 
-    options = {"model": "../dnnweaver2/example/conf/tiny-yolo-voc.cfg", "load": "../dnnweaver2/example/weights/tiny-yolo-voc.weights", "threshold": 0.25}
+    options = {"model": "conf/tiny-yolo-voc.cfg", "load": "weights/tiny-yolo-voc.weights", "threshold": 0.25}
     tfnet = TFNet(options)
 
     if yolo_engine == "dnnweaver2":
@@ -62,12 +70,12 @@ def detection(yolo_engine, tf_w_pickle, dnnweaver2_w_pickle, frame_q, frame_l, b
 
             start = time()
             if yolo_engine == "tf-cpu" or yolo_engine == "tf-gpu":
-                im = tfnet.framework.resize_input(cur_frame)
+                im = resize_input((416, 416, 3), cur_frame)
                 im = np.expand_dims(im, 0)
                 tout = y2t_tf.inference(im)
                 result = get_bbox(tfnet, tout[0], h, w) 
             elif yolo_engine == "dnnweaver2":
-                im = tfnet.framework.resize_input(cur_frame)
+                im = resize_input((416, 416, 3), cur_frame)
                 im = np.expand_dims(im, 0)
                 _im = yolo_demo.fp32tofxp16_tensor(im, 8) 
                 intermediate_tout = dnn_fpga.fpga_inference(fpga_manager, _im)
