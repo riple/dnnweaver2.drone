@@ -3,3 +3,5 @@
 capture*
 inst.bin
 *.swp
+*.mp4
+*.weights
